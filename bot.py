@@ -1,8 +1,9 @@
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import ephem
 from datetime import date
-from random import randint
+import ephem
+from glob import glob
+import logging
+from random import choice, randint
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 import settings
 
@@ -14,6 +15,7 @@ commands_list = {
     '/planet': ['Shows the constellation of the planet of interest', 'planet name'],
     '/guess': ['Play a guess-game. Whether you value is greater', 'number'],
     '/wordcount': ['Counts words in the sentence', 'sentence'],
+    '/cat': ['Sends cat picture', None],
     '<any message>': ['Repeats the message input by user', 'message']
 }
 
@@ -65,7 +67,7 @@ def count_words(update, context):
 
 
 def guess_game(update, context):
-    print('/guess command initiated with the following context: {context.args}')
+    print(f'/guess command initiated with the following context: {context.args}')
     if context.args:
         try:
             user_number = int(context.args[0])
@@ -88,6 +90,15 @@ def play_guess_game(user_number):
         return f'Your number is {user_number}, my number is {bot_number}. I won!'
 
 
+def send_cat_pic(update, context):
+    print('/cat command initiated')
+    cat_photos_list = glob('images/cat*.jp*g')
+    cat_pic_filename = choice(cat_photos_list)
+    chat_id = update.effective_chat.id
+    context.bot.send_photo(chat_id=chat_id, photo=open(cat_pic_filename, 'rb'))
+    print('/cat command completed')
+
+
 def talk_to_me(update, context):
     user_text = update.message.text
     print(f'No command is called so \'talked_to_me\' is initiated with the following input: {user_text}')
@@ -104,6 +115,7 @@ def main():
     dp.add_handler(CommandHandler('planet', check_planet))
     dp.add_handler(CommandHandler('wordcount', count_words))
     dp.add_handler(CommandHandler('guess', guess_game))
+    dp.add_handler(CommandHandler('cat', send_cat_pic))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
 
     print('I have been started')
