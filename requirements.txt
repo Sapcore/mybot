@@ -1,0 +1,15 @@
+APScheduler==3.6.3
+backports.zoneinfo==0.2.1
+cachetools==4.2.2
+certifi==2023.7.22
+ephem==4.1.4
+flake8==6.1.0
+mccabe==0.7.0
+pycodestyle==2.11.0
+pyflakes==3.1.0
+PySocks==1.7.1
+python-telegram-bot==13.14
+pytz==2023.3
+six==1.16.0
+tornado==6.1
+tzlocal==5.0.1
